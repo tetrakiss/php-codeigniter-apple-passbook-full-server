@@ -1,10 +1,19 @@
-Apple Passbook Updater
+Apple Passbook PHP server (generate pass register device and update pass)
 ======================================
 
-CodeIgniter based Apple Passbook Controller and Model.
+
+
+CodeIgniter Framework with full functional for Apple Passbook.
 
 apple_passbook.sql contains tables needed for Apple Passbook updates. 
 
-This code is NOT for generating Apple Passes, its for updating apple passes.
+This code FOR generating Apple Passes, its for updating apple passes and etc.
 
-For generating Apple Passes, use [PHP APNS](https://github.com/duccio/ApnsPHP)
+
+v0.0.2
+=======================================
+Inital setup of all libs
+
+v0.0.1
+=======================================
+Project start

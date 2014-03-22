@@ -7,10 +7,11 @@ class Passgenerator extends CI_Controller {
 		parent::__construct();
 		$this->load->model('passbook', 'passbook');
 	}
-	function test() {// User has filled in the card info, so create the pass now
+	
+function test() {// User has filled in the card info, so create the pass now
 	
 	setlocale(LC_ALL, 'ru_RU.UTF-8');
-	$this->load->library('PHPExcel');
+	$this->load->library('PKPass');
 		
 	// Variables
 	$id = rand(100000,999999) . '-' . rand(100,999) . '-' . rand(100,999); // Every card should have a unique serialNumber

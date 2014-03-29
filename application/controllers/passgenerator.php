@@ -16,15 +16,15 @@ function test() {// User has filled in the card info, so create the pass now
 	// Variables
 	$id = rand(100000,999999) . '-' . rand(100,999) . '-' . rand(100,999); // Every card should have a unique serialNumber
 	$balance = '$'.rand(0,30).'.'.rand(10,99); // Create random balance
-	$name = stripslashes($_POST['name']);
+	//$name = stripslashes($_POST['name']);
 	
 	
 	// Create pass
-	$pass = new PKPass\PKPass();
-
-	$pass->setCertificate('passbook.p12'); // Set the path to your Pass Certificate (.p12 file)
+	//$pass = new PKPass\PKPass();
+$pass = new PKPass();
+	$pass->setCertificate('certificates/passbook.p12'); // Set the path to your Pass Certificate (.p12 file)
 	$pass->setCertificatePassword('12shreder34'); // Set password for certificate
-	$pass->setWWDRcertPath('AppleWWDR.pem');
+	$pass->setWWDRcertPath('certificates/AppleWWDR.pem');
 	$pass->setJSON('{ 
 	"passTypeIdentifier": " ",
 	"formatVersion": 1,
@@ -83,12 +83,12 @@ function test() {// User has filled in the card info, so create the pass now
     }');
 
     // add files to the PKPass package
-    $pass->addFile('icon.png');
-    $pass->addFile('icon@2x.png');
-    $pass->addFile('logo.png');
-	 $pass->addFile('logo@2x.png');
-    $pass->addFile('strip.png');
-	$pass->addFile('strip@2x.png');
+    $pass->addFile('assets/img/coupons/test/icon.png');
+    $pass->addFile('assets/img/coupons/test/icon@2x.png');
+    $pass->addFile('assets/img/coupons/test/logo.png');
+	 $pass->addFile('assets/img/coupons/test/logo@2x.png');
+    $pass->addFile('assets/img/coupons/test/strip.png');
+	$pass->addFile('assets/img/coupons/test/strip@2x.png');
 
     if(!$pass->create(true)) { // Create and output the PKPass
         echo 'Error: '.$pass->getError();

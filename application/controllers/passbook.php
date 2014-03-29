@@ -5,10 +5,12 @@ class Passbook extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('passbook', 'passbook');
+		$this->load->model('Passbook_model', 'passbook');
+		 $this->load->helper(array('ssl_helper'));
 	}
 
 	public function index($version, $devices, $deviceId , $registrations, $passTypeId, $serialNo ){
+		// force_ssl();
 		$method = strtolower($this->input->server('REQUEST_METHOD'));
 
 		if ($method == "post") {

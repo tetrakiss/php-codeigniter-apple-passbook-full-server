@@ -5,7 +5,7 @@ class Passgenerator extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('passbook', 'passbook');
+		
 	}
 	
 function test() {// User has filled in the card info, so create the pass now
@@ -30,7 +30,7 @@ $pass = new PKPass();
 	"formatVersion": 1,
 	"organizationName": " ",
 	"teamIdentifier": " ",
-	"webServiceURL" : "https://passbook.corso-como.ru",
+	"webServiceURL" : "https://passbook.corso-como.ru/index.php/passbook",
   "authenticationToken" : "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc",
   "barcode" : {
     "altText" : "'.$id.'",

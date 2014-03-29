@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Passbook extends CI_Model {
+class Passbook_model extends CI_Model {
 
 	public function insert_pass($data) {
 		$query = $this->db->get_where('apple_passes', array('serial_number' => $data['serial_number']));

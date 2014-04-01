@@ -9,6 +9,9 @@ apple_passbook.sql contains tables needed for Apple Passbook updates.
 
 This code FOR generating Apple Passes, its for updating apple passes and etc.
 
+v0.0.4
+=======================================
+Now pass registered in sys
 
 v0.0.3
 =======================================

@@ -7,13 +7,26 @@ class Passbook extends CI_Controller {
 		parent::__construct();
 		$this->load->model('Passbook_model', 'passes');
 		 $this->load->helper(array('ssl_helper'));
+		 $this->config->load('passbook', TRUE);
 	}
 
 
-	public function connect($version, $devices, $deviceId , $registrations, $passTypeId, $serialNo ){
-		$data = array('time'=>time());
+	//public function connect($version, $devices, $deviceId = NULL , $registrations = NULL, $passTypeId, $serialNo ){
+		public function connect(){
+		$version=$this->uri->segment(3, 0);
+		$devices=$this->uri->segment(4, 0);
+		if($devices == "devices"){
+		$deviceId=$this->uri->segment(5, 0);
+		$registrations=$this->uri->segment(6, 0);
+		$passTypeId=$this->uri->segment(7, 0);
+		$serialNo=$this->uri->segment(8, 0);
+		}
+		if($devices == "passes"){		
+		$passTypeId=$this->uri->segment(5, 0);
+		$serialNo=$this->uri->segment(6, 0);
+		}
 		
-		//$this->db->insert('test', $data); 
+		
 		
 		// force_ssl();
 		$method = strtolower($this->input->server('REQUEST_METHOD'));
@@ -30,8 +43,8 @@ class Passbook extends CI_Controller {
 				$this->return_serials($version, $devices, $deviceId , $registrations, $passTypeId);
 			}else if ($devices == "passes"){
 				// version/passes/passTypeIdentifier/serialNumber
-				$passTypeId = $deviceId;
-				$serialNo = $registrations;
+				//$passTypeId = $deviceId;
+				//$serialNo = $registrations;
 				$this->return_pass($version, "passes", $passTypeId, $serialNo);
 			}
 		}else if ($method == "delete") {
@@ -88,9 +101,14 @@ class Passbook extends CI_Controller {
 			$this->output->set_status_header(401);
 			exit;
 		}
-		list($ft_order_id, $ticket_num) = explode('-', $serialNo);
+		/*list($ft_order_id, $ticket_num) = explode('-', $serialNo);
 		header('Last-modified:' .date('r'));
-		$this->get_pass($ft_order_id, $ticket_num);
+		$this->get_pass($ft_order_id, $ticket_num);*/
+		$this->output->set_status_header(200);
+		//header('Last-modified:' .date('r'));
+		//$this->output->set_status_header(304);
+		$this->output->set_header('Last-Modified: '.date('r'));
+		$this->test($serialNo);
 	}
 
 	// delete apple pass
@@ -106,6 +124,100 @@ class Passbook extends CI_Controller {
 	public function log() {
 		error_log("Printing error log pass");
 		error_log(file_get_contents("php://input"));
+	}
+
+
+
+function test($serialNo) {// User has filled in the card info, so create the pass now
+	
+	setlocale(LC_ALL, 'ru_RU.UTF-8');
+	$this->load->library('PKPass');
+		
+	
+	
+	
+			/*$insert_data['serial_number'] = $id;
+			$insert_data['authentication_token'] = $this->config->item('authenticationToken', 'passbook');
+			$insert_data['pass_type_id'] = $this->config->item('passTypeIdentifier', 'passbook');
+			$insert_data['last_update_datetime'] = time();
+			
+			$this->passes->insert_pass($insert_data);
+	*/
+	// Create pass
+	//$pass = new PKPass\PKPass();
+$pass = new PKPass();
+	$pass->setCertificate('certificates/passbook.p12'); // Set the path to your Pass Certificate (.p12 file)
+	$pass->setCertificatePassword('12shreder34'); // Set password for certificate
+	$pass->setWWDRcertPath('certificates/AppleWWDR.pem');
+	$pass->setJSON('{ 
+	"passTypeIdentifier": "'.$this->config->item('passTypeIdentifier', 'passbook').'",
+	"formatVersion": 1,
+	"organizationName": "'.$this->config->item('organizationName', 'passbook').'",
+	"teamIdentifier": "'.$this->config->item('teamIdentifier', 'passbook').'",
+	"webServiceURL" : "'.$this->config->item('webServiceURL', 'passbook').'",
+  "authenticationToken" : "'.$this->config->item('authenticationToken', 'passbook').'",
+  "barcode" : {
+    "altText" : "'.$serialNo.'",
+    "message" : "'.$serialNo.'",
+    "format" : "PKBarcodeFormatPDF417",
+    "messageEncoding" : "iso-8859-1"
+  },
+	"serialNumber": "'.$serialNo.'",
+    "backgroundColor": "rgb(240,240,240)",
+	"logoText": "",
+	"description": "Demo pass",
+	"coupon": {
+		"primaryFields" : [
+      {
+        "key" : "offer",
+        "label" : " ",
+        "value" : " "
+      }
+    ],
+    "auxiliaryFields" : [
+      {
+        "key" : "expires",
+        "label" : "действителен до",
+        "value" : "2013-06-01T10:00-05:00",
+        "isRelative" : true,
+        "dateStyle" : "PKDateStyleShort"
+      }
+    ],    "backFields" : [
+        
+        {
+            "key" : "website",
+            "label" : "",
+            "value" : "http://www.corsocomo.ru"
+        },
+        {
+            "key" : "customer-service",
+            "label" : "Горячая линия CORSOCOMO",
+            "value" : "8 800 333 03 46"
+        },
+        {
+            "key" : "terms",
+            "label" : "Условия предоставления скидки",
+            "value" : "С 5 марта по 31 мая в магазинах сети CORSOCOMO проходит специальная акция: при покупке на сумму от 3000 руб. Вы получаете в подарок сертификат на скидку в размере 1000 рублей! Скидка предоставляется при совершении повторной покупки любой пары обуви или сумки из коллекции Весна-Лето 2014 в магазинах CORSOCOMO до 31 мая. Подробности уточняйте в магазинах CORSOCOMO в Вашем городе."
+        }
+    ]
+        
+        
+    }
+    
+    }');
+
+    // add files to the PKPass package
+    $pass->addFile('assets/img/coupons/test/icon.png');
+    $pass->addFile('assets/img/coupons/test/icon@2x.png');
+    $pass->addFile('assets/img/coupons/test/logo.png');
+	 $pass->addFile('assets/img/coupons/test/logo@2x.png');
+    $pass->addFile('assets/img/coupons/test/strip.png');
+	$pass->addFile('assets/img/coupons/test/strip@2x.png');
+
+    if(!$pass->create(true)) { // Create and output the PKPass
+        echo 'Error: '.$pass->getError();
+    }
+    exit;
 	}
 
 }

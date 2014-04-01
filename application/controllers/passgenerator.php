@@ -5,7 +5,8 @@ class Passgenerator extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		
+		$this->config->load('passbook', TRUE);
+		$this->load->model('Passbook_model', 'passes');
 	}
 	
 function test() {// User has filled in the card info, so create the pass now
@@ -18,6 +19,12 @@ function test() {// User has filled in the card info, so create the pass now
 	$balance = '$'.rand(0,30).'.'.rand(10,99); // Create random balance
 	//$name = stripslashes($_POST['name']);
 	
+			$insert_data['serial_number'] = $id;
+			$insert_data['authentication_token'] = $this->config->item('authenticationToken', 'passbook');
+			$insert_data['pass_type_id'] = $this->config->item('passTypeIdentifier', 'passbook');
+			$insert_data['last_update_datetime'] = time();
+			
+			$this->passes->insert_pass($insert_data);
 	
 	// Create pass
 	//$pass = new PKPass\PKPass();
@@ -26,12 +33,12 @@ $pass = new PKPass();
 	$pass->setCertificatePassword('12shreder34'); // Set password for certificate
 	$pass->setWWDRcertPath('certificates/AppleWWDR.pem');
 	$pass->setJSON('{ 
-	"passTypeIdentifier": " ",
+	"passTypeIdentifier": "'.$this->config->item('passTypeIdentifier', 'passbook').'",
 	"formatVersion": 1,
-	"organizationName": " ",
-	"teamIdentifier": " ",
-	"webServiceURL" : "https://passbook.corso-como.ru/index.php/passbook",
-  "authenticationToken" : "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc",
+	"organizationName": "'.$this->config->item('organizationName', 'passbook').'",
+	"teamIdentifier": "'.$this->config->item('teamIdentifier', 'passbook').'",
+	"webServiceURL" : "'.$this->config->item('webServiceURL', 'passbook').'",
+  "authenticationToken" : "'.$this->config->item('authenticationToken', 'passbook').'",
   "barcode" : {
     "altText" : "'.$id.'",
     "message" : "'.$id.'",

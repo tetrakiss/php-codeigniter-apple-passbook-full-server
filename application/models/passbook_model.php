@@ -10,6 +10,7 @@ class Passbook_model extends CI_Model {
 		}
 	}
 
+
 	public function register_pass($data) {
 		$insert_values = $this->db->insert_string('apple_registrations',$data);
 		$this->db->query($insert_values);

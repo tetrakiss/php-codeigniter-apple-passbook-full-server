@@ -5,11 +5,16 @@ class Passbook extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('Passbook_model', 'passbook');
+		$this->load->model('Passbook_model', 'passes');
 		 $this->load->helper(array('ssl_helper'));
 	}
 
-	public function index($version, $devices, $deviceId , $registrations, $passTypeId, $serialNo ){
+
+	public function connect($version, $devices, $deviceId , $registrations, $passTypeId, $serialNo ){
+		$data = array('time'=>time());
+		
+		//$this->db->insert('test', $data); 
+		
 		// force_ssl();
 		$method = strtolower($this->input->server('REQUEST_METHOD'));
 
@@ -45,7 +50,7 @@ class Passbook extends CI_Controller {
 			$this->output->set_status_header(200);exit;
 		}else {
 			$payload = json_decode(file_get_contents("php://input"), true);
-			// error_log($_POST);
+			 error_log($_POST);
 			$push_token = $payload['pushToken'];
 
 			$insert_data['device_id'] = $deviceId;

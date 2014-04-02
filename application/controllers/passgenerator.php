@@ -63,7 +63,8 @@ $pass = new PKPass();
         "label" : "действителен до",
         "value" : "2013-05-31T10:00-05:00",
         "isRelative" : true,
-        "dateStyle" : "PKDateStyleShort"
+        "dateStyle" : "PKDateStyleShort",
+		"changeMessage":"Gate changed to %@."
       }
     ],    "backFields" : [
         

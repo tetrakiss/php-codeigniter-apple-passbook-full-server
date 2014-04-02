@@ -11,7 +11,8 @@ class Notification extends CI_Controller {
 	}
 
 	public function test($token ){
-		$this->notification_model->send_ios($token, 'Test Message', array('custom_var' => 'val'));
+		//$this->notification_model->send_ios($token, 'CORSOCOMO', array('key' => 'expires', 'value' => '2013-06-02T10:00-05:00', 'changeMessage' => 'Date changed to %@.'));
+		$this->notification_model->send_ios($token, 'CORSOCOMO');
 	}
 }
 

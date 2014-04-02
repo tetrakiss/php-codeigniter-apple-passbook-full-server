@@ -36,14 +36,15 @@ class Notification_model extends CI_Model {
      * @return void
      * @access public
      */
-    private function send_ios($token=null, $msg=null, $attrs=array()) {
+    public function send_ios($token=null, $msg=null, $attrs=array()) {
 
         if(!$token || !$msg) return;
 
         // Instantiate a new ApnsPHP_Push object
         $push = new ApnsPHP_Push(
-            ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
-            $this->apnsDir.'SSL/server_certificates_bundle_sandbox.pem'
+		  ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION,
+           // ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION,
+            $this->apnsDir.'SSL/pass.pem'
         );
 
         // Set the Provider Certificate passphrase
@@ -93,10 +94,10 @@ class Notification_model extends CI_Model {
         $push->disconnect();
 
         // Examine the error message container
-        // $aErrorQueue = $push->getErrors();
-        // if (!empty($aErrorQueue)) {
-        //  var_dump($aErrorQueue);
-        // }
+         $aErrorQueue = $push->getErrors();
+         if (!empty($aErrorQueue)) {
+          var_dump($aErrorQueue);
+         }
 
         return TRUE;
 

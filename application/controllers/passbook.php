@@ -81,7 +81,8 @@ class Passbook extends CI_Controller {
 			$this->output->set_status_header(404);exit;
 		}
 		$passesUpdatedSince = isset($_GET['passesUpdatedSince']) ? $_GET['passesUpdatedSince'] : "";
-		$passes = $this->passes->get_device_passes($deviceId, $passTypeId, $passesUpdatedSince);
+		//$passes = $this->passes->get_device_passes($deviceId, $passTypeId, $passesUpdatedSince);
+		$passes = $this->passes->get_device_passes($deviceId, $passTypeId);
 		if (count($passes) > 0) {
 			$response_array = array(
 				'lastUpdated' => date(DATE_ATOM),
@@ -171,16 +172,18 @@ $pass = new PKPass();
       {
         "key" : "offer",
         "label" : " ",
-        "value" : " "
+        "value" : " ",
+		
       }
     ],
     "auxiliaryFields" : [
       {
         "key" : "expires",
         "label" : "действителен до",
-        "value" : "2013-06-01T10:00-05:00",
+        "value" : "2013-06-03T10:00-05:00",
         "isRelative" : true,
-        "dateStyle" : "PKDateStyleShort"
+        "dateStyle" : "PKDateStyleShort",
+		"changeMessage":"Действие вашего купона продлено до %@."
       }
     ],    "backFields" : [
         

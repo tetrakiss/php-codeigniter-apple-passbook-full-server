@@ -31,7 +31,21 @@ class Passbook_model extends CI_Model {
 		return ($query->num_rows() >= 1) ? true:false;
 	}
 
-	public function get_device_passes($device_id, $pass_type_id, $updated_since) {
+	public function get_device_passes($device_id, $pass_type_id) {
+		$serials = array();
+		$sql_updated = "SELECT DISTINCT(p.serial_number) as serial_number FROM apple_registrations r LEFT JOIN apple_passes p
+						ON r.serial_number = p.serial_number AND p.pass_type_id = r.pass_type_id WHERE p.pass_type_id = '".$pass_type_id."' AND device_id = '".$device_id."'";
+		
+		$result = $this->db->query($sql_updated)->result_array();
+		if (is_array($result)) {
+			foreach ($result as $value) {
+				$serials[] = $value['serial_number'];
+			}
+		}
+		return $serials;
+	}
+	
+	/*public function get_device_passes($device_id, $pass_type_id, $updated_since) {
 		$serials = array();
 		$sql_updated = "SELECT DISTINCT(p.serial_number) as serial_number FROM apple_registrations r LEFT JOIN apple_passes p
 						ON r.serial_number = p.serial_number AND p.pass_type_id = r.pass_type_id WHERE p.pass_type_id = '".$pass_type_id."' AND device_id = '".$device_id."'";
@@ -46,7 +60,7 @@ class Passbook_model extends CI_Model {
 		}
 		return $serials;
 	}
-
+*/
 	public function delete_pass($device_id, $serial_no) {
 		$query = $this->db->delete('apple_registrations', array('device_id' => $device_id, 'serial_number' => $serial_no));
 	}
